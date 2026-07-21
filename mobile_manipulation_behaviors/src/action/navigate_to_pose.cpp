@@ -4,6 +4,7 @@
 #include "geometry_msgs/msg/pose.hpp"
 #include "nav2_msgs/action/navigate_to_pose.hpp"
 #include "behaviortree_ros2/plugins.hpp"
+#include "mobile_manipulation_behaviors/conversions.hpp"
 
 using NavigateToPose = nav2_msgs::action::NavigateToPose;
 using PoseStamped = geometry_msgs::msg::PoseStamped;
@@ -11,49 +12,6 @@ using Pose = geometry_msgs::msg::Pose;
 
 namespace BT
 {
-
-template<>
-[[nodiscard]] Pose convertFromString<Pose>(StringView str);
-
-template<>
-[[nodiscard]] std::string toStr<Pose>(const Pose & direction);
-
-template<>
-Pose convertFromString<Pose>(StringView str)
-{
-  std::vector<double> pose_parts = convertFromString<std::vector<double>>(str);
-  if (pose_parts.size() != 7) {
-    throw RuntimeError(
-            std::string("Cannot convert this to Pose: ") +
-            static_cast<std::string>(str));
-  }
-  Pose pose;
-  pose.position.x = pose_parts[0];
-  pose.position.y = pose_parts[1];
-  pose.position.z = pose_parts[2];
-  pose.orientation.x = pose_parts[3];
-  pose.orientation.y = pose_parts[4];
-  pose.orientation.z = pose_parts[5];
-  pose.orientation.w = pose_parts[6];
-  return pose;
-}
-
-template<>
-std::string toStr<Pose>(const Pose & pose)
-{
-  std::stringstream ss;
-  ss << pose.position.x << ";" << pose.position.y << ";" << pose.position.z << ";"
-     << pose.orientation.x << ";" << pose.orientation.y << ";" << pose.orientation.z
-     << ";" << pose.orientation.w;
-  return ss.str();
-}
-
-std::ostream & operator<<(std::ostream & os, const Pose & pose)
-{
-  os << toStr(pose);
-  return os;
-}
-
 
 class NavigateToPoseAction : public RosActionNode<NavigateToPose>
 {

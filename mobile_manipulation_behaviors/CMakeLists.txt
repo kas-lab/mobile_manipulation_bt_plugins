@@ -13,6 +13,9 @@ find_package(behaviortree_cpp REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(nav_msgs REQUIRED)
 find_package(nav2_msgs REQUIRED)
+find_package(tf2 REQUIRED)
+
+include_directories(include)
 
 set(THIS_PACKAGE_DEPS
     rclcpp
@@ -20,23 +23,35 @@ set(THIS_PACKAGE_DEPS
     behaviortree_cpp
     geometry_msgs
     nav_msgs
-    nav2_msgs)
+    nav2_msgs
+    tf2)
 
-add_library(navigate_to_pose_plugin SHARED src/navigate_to_pose_action.cpp)
+add_library(navigate_to_pose_plugin SHARED src/action/navigate_to_pose.cpp)
 target_compile_definitions(navigate_to_pose_plugin PRIVATE  BT_PLUGIN_EXPORT)
 ament_target_dependencies(navigate_to_pose_plugin ${THIS_PACKAGE_DEPS})
+
+add_library(next_pose_plugin SHARED src/decorator/next_pose.cpp)
+target_compile_definitions(next_pose_plugin PRIVATE  BT_PLUGIN_EXPORT)
+ament_target_dependencies(next_pose_plugin ${THIS_PACKAGE_DEPS})
 
 
 install(TARGETS
   navigate_to_pose_plugin
+  next_pose_plugin
   DESTINATION lib/${PROJECT_NAME}
 )
 
 install(TARGETS
   navigate_to_pose_plugin
+  next_pose_plugin
   LIBRARY DESTINATION share/${PROJECT_NAME}/bt_plugins
   ARCHIVE DESTINATION share/${PROJECT_NAME}/bt_plugins
   RUNTIME DESTINATION share/${PROJECT_NAME}/bt_plugins
+)
+
+install(
+  DIRECTORY include/
+  DESTINATION include
 )
 
 if(BUILD_TESTING)
@@ -51,4 +66,5 @@ if(BUILD_TESTING)
   ament_lint_auto_find_test_dependencies()
 endif()
 
+ament_export_include_directories(include)
 ament_package()
