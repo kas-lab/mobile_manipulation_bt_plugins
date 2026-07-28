@@ -26,18 +26,22 @@ set(THIS_PACKAGE_DEPS
     nav2_msgs
     tf2)
 
-add_library(navigate_to_pose_plugin SHARED src/action/navigate_to_pose.cpp)
+add_library(navigate_to_pose_plugin SHARED src/plugins/action/navigate_to_pose.cpp)
 target_compile_definitions(navigate_to_pose_plugin PRIVATE  BT_PLUGIN_EXPORT)
 ament_target_dependencies(navigate_to_pose_plugin ${THIS_PACKAGE_DEPS})
 
-add_library(next_pose_plugin SHARED src/decorator/next_pose.cpp)
+add_library(next_pose_plugin SHARED src/plugins/decorator/next_pose.cpp)
 target_compile_definitions(next_pose_plugin PRIVATE  BT_PLUGIN_EXPORT)
 ament_target_dependencies(next_pose_plugin ${THIS_PACKAGE_DEPS})
+
+add_executable(nav2_plugin_configurer src/nav2_plugin_configurer.cpp)
+ament_target_dependencies(nav2_plugin_configurer ${THIS_PACKAGE_DEPS})
 
 
 install(TARGETS
   navigate_to_pose_plugin
   next_pose_plugin
+  nav2_plugin_configurer
   DESTINATION lib/${PROJECT_NAME}
 )
 
