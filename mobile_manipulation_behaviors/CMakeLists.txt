@@ -8,8 +8,8 @@ endif()
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
-find_package(behaviortree_ros2 REQUIRED)
-find_package(behaviortree_cpp REQUIRED)
+# find_package(behaviortree_ros2 REQUIRED)
+# find_package(behaviortree_cpp REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(nav_msgs REQUIRED)
 find_package(nav2_msgs REQUIRED)
@@ -19,39 +19,39 @@ include_directories(include)
 
 set(THIS_PACKAGE_DEPS
     rclcpp
-    behaviortree_ros2
-    behaviortree_cpp
+    # behaviortree_ros2
+    # behaviortree_cpp
     geometry_msgs
     nav_msgs
     nav2_msgs
     tf2)
 
-add_library(navigate_to_pose_plugin SHARED src/plugins/action/navigate_to_pose.cpp)
-target_compile_definitions(navigate_to_pose_plugin PRIVATE  BT_PLUGIN_EXPORT)
-ament_target_dependencies(navigate_to_pose_plugin ${THIS_PACKAGE_DEPS})
+#add_library(navigate_to_pose_plugin SHARED src/plugins/action/navigate_to_pose.cpp)
+#target_compile_definitions(navigate_to_pose_plugin PRIVATE  BT_PLUGIN_EXPORT)
+#ament_target_dependencies(navigate_to_pose_plugin ${THIS_PACKAGE_DEPS})
 
-add_library(next_pose_plugin SHARED src/plugins/decorator/next_pose.cpp)
-target_compile_definitions(next_pose_plugin PRIVATE  BT_PLUGIN_EXPORT)
-ament_target_dependencies(next_pose_plugin ${THIS_PACKAGE_DEPS})
+#add_library(next_pose_plugin SHARED src/plugins/decorator/next_pose.cpp)
+#target_compile_definitions(next_pose_plugin PRIVATE  BT_PLUGIN_EXPORT)
+#ament_target_dependencies(next_pose_plugin ${THIS_PACKAGE_DEPS})
 
 add_executable(nav2_plugin_configurer src/nav2_plugin_configurer.cpp)
 ament_target_dependencies(nav2_plugin_configurer ${THIS_PACKAGE_DEPS})
 
 
 install(TARGETS
-  navigate_to_pose_plugin
-  next_pose_plugin
+  #navigate_to_pose_plugin
+  #next_pose_plugin
   nav2_plugin_configurer
   DESTINATION lib/${PROJECT_NAME}
 )
 
-install(TARGETS
-  navigate_to_pose_plugin
-  next_pose_plugin
-  LIBRARY DESTINATION share/${PROJECT_NAME}/bt_plugins
-  ARCHIVE DESTINATION share/${PROJECT_NAME}/bt_plugins
-  RUNTIME DESTINATION share/${PROJECT_NAME}/bt_plugins
-)
+#install(TARGETS
+#  navigate_to_pose_plugin
+#  next_pose_plugin
+#  LIBRARY DESTINATION share/${PROJECT_NAME}/bt_plugins
+#  ARCHIVE DESTINATION share/${PROJECT_NAME}/bt_plugins
+#  RUNTIME DESTINATION share/${PROJECT_NAME}/bt_plugins
+#)
 
 install(
   DIRECTORY include/
